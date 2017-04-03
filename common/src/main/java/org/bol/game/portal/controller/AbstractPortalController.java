@@ -1,5 +1,6 @@
 package org.bol.game.portal.controller;
 
+import org.bol.game.portal.dto.Game;
 import org.bol.game.portal.dto.User;
 import org.bol.game.portal.flow.Workflow;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
-public abstract class AbstractPortalController<ActualUser extends User> {
+public abstract class AbstractPortalController<ActualUser extends User, ActualGame extends Game<ActualUser>> {
 
 	@Autowired
 	private SimpMessagingTemplate simpMessagingTemplate;
@@ -27,6 +28,6 @@ public abstract class AbstractPortalController<ActualUser extends User> {
 		return simpMessagingTemplate;
 	}
 
-	protected abstract Workflow<ActualUser> getWorkflow();
+	protected abstract Workflow<ActualUser, ActualGame> getWorkflow();
 
 }
