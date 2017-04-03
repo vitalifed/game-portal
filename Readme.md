@@ -58,7 +58,7 @@ At the same time, a client subscribes as a listener on a single topic, where the
 The client evaluates a command and executes it straightforward as a function.
 
 
-**See in Common module AbstractPortalController.java**
+**See in common module AbstractPortalController.java**
 ```java
 
 	@MessageMapping("/room/{room}/create")
