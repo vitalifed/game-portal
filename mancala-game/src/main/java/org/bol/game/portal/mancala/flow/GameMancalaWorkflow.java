@@ -41,7 +41,7 @@ public class GameMancalaWorkflow extends GenericMancalaWorkflow {
 
 		Map<MancalaUser, ?> map = roomRepository.get(room).getState();
 		if (map.size() == 2) {
-			roomRepository.startGame(room);
+			roomRepository.init(room);
 
 			ListMessageCommandBuilder builder = new ListMessageCommandBuilder();
 

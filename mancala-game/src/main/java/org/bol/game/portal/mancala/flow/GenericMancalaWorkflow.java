@@ -21,7 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
-public abstract class GenericMancalaWorkflow implements MancalaWorkflow<MancalaUser> {
+public abstract class GenericMancalaWorkflow implements MancalaWorkflow<MancalaUser, Mancala> {
 
 	public static final String TOKEN = "token";
 	public static final String ROOM = "room";
@@ -106,6 +106,29 @@ public abstract class GenericMancalaWorkflow implements MancalaWorkflow<MancalaU
 		return builder;
 	}
 
+	@Override
+	public CommandBuilder<?> stopGame(String roomName, Mancala game) {
+		if (logger.isDebugEnabled())
+			logger.debug("Stop game, room = " + roomName);
+		ListMessageCommandBuilder builder = new ListMessageCommandBuilder();
+
+		MancalaUser[] remainingUsers = game.getState().keySet().toArray(new MancalaUser[0]);
+		
+		Map<String, String> mapping = new HashMap<>();
+		mapping.put(ROOM, roomName);
+		for (int i = 0; i < remainingUsers.length; i++) {
+			mapping.put(TOKEN, remainingUsers[i].getToken());
+
+			SimpleLauncher<Message> launcher = new MessageCommandBuilder()
+					.message("Game is over", Message.Type.WARNING)
+					.command(RemoteCommand.DISCONNECT.command()).topic(StrSubstitutor.replace(getPathCmd(), mapping))
+					.build();
+
+			builder.addLauncher(launcher);
+		}
+		return builder;
+	}
+	
 	protected abstract RoomRepository<MancalaUser, Mancala> getRoomRepository();
 
 	protected String getPathCmd() {

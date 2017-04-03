@@ -2,6 +2,7 @@ package org.bol.game.portal.mancala.controller;
 
 import org.bol.game.portal.controller.AbstractPortalController;
 import org.bol.game.portal.flow.Workflow;
+import org.bol.game.portal.mancala.dto.Mancala;
 import org.bol.game.portal.mancala.dto.MancalaUser;
 import org.bol.game.portal.mancala.flow.GameMancalaWorkflow;
 import org.slf4j.Logger;
@@ -14,7 +15,7 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class MancalaPortalController extends AbstractPortalController<MancalaUser> {
+public class MancalaPortalController extends AbstractPortalController<MancalaUser, Mancala> {
 
 	private static final Logger logger = LoggerFactory.getLogger(MancalaPortalController.class);
 
@@ -31,7 +32,7 @@ public class MancalaPortalController extends AbstractPortalController<MancalaUse
 	}
 
 	@Override
-	protected Workflow<MancalaUser> getWorkflow() {
+	protected Workflow<MancalaUser, Mancala> getWorkflow() {
 		return workflow;
 	}
 }
