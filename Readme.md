@@ -13,7 +13,7 @@ The architecture of the project does not focus on solving only a specific task, 
 
 The client establishes a connection with an endpoint and sends a request to a controller:
 
-**See mancala.js**
+**See room.full.js**
 
 ```javascript
 
@@ -23,24 +23,25 @@ The client establishes a connection with an endpoint and sends a request to a co
 		Room.stompClient.connect({}, function(frame) {
 			console.log('Connected: ' + frame);
 
-			Room.stompClient.subscribe('/topic/mancala/' + Room.uniqueId + '/' + Room.name + '/cmd',
+			Room.stompClient.subscribe('/topic'+Room.contextRoot+'/' + Room.uniqueId + '/' + Room.name + '/cmd',
 					function(command) {
-						console.log('/topic/mancala/' + Room.uniqueId + '/' + Room.name + '/cmd, Command: ' + command)
+						console.log('/topic'+Room.contextRoot+'/' + Room.uniqueId + '/' + Room.name + '/cmd, Command: ' + command)
 						var cmd = JSON.parse(command.body);
 
-						Room.message(cmd);
-						
 						var commandToRun = eval('Room.' + cmd.command);
 						console.log(commandToRun)
 						
 						if (commandToRun)
 						    commandToRun(cmd)
+						    
+						Room.message(cmd);
+    
 					});
 			Room.create(null);
 		});
 
 
-		Room.stompClient.send("/mancala/room/" + Room.name + '/create', {}, JSON.stringify({
+		Room.stompClient.send(Room.contextRoot + "/room/" + Room.name + '/create', {}, JSON.stringify({
 			'name' : Room.user.name,
 			'token' : Room.uniqueId
 		}));
@@ -48,7 +49,16 @@ The client establishes a connection with an endpoint and sends a request to a co
 
 ```
 
-**Common module AbstractPortalController.java**
+The portal's controller works by processing incoming requests into a POJO, allowing further a workflow to make a decision about required steps.
+Just before sending a **Command.java** to listeners, **Workflow.java** applies specific parameters to these commands in a straightforward fashion. 
+
+While this limits a abstract controller to only supporting POJO **User.java** and text-based parameter, it is dramatically simplified system aspects such as replaying requests.  
+
+At the same time, a client subscribes as a listener on a single topic, where the payload of a response is a JSON which is obtained from POJO **Command.java** 
+The client evaluates a command and executes it straightforward as a function.
+
+
+**See in Common module AbstractPortalController.java**
 ```java
 
 	@MessageMapping("/room/{room}/create")
@@ -77,29 +87,23 @@ The client establishes a connection with an endpoint and sends a request to a co
 
 ```
 
-The portal's controller works by processing incoming requests into a POJO, allowing further a workflow to makes a decision about required steps.
-Just before sending a **Command.java** to listeners, **Workflow.java** applies specific parameters to these commands in a straightforward fashion. 
-
-While this limits a abstract controller to only supporting POJO **User** and text-based parameter, it is dramatically simplified system aspects such as replaying requests.  
-
-At the same time, a client subscribes as a listener on a single topic, where the payload of a response is a JSON transformed from POJO **Command.java** 
-The client evaluates a command and executes it straightforward as a function.
  
 **How to subscribe on topic**
 ```javascript
 
-			Room.stompClient.subscribe('/topic/mancala/' + Room.uniqueId + '/' + Room.name + '/cmd',
+			Room.stompClient.subscribe('/topic'+Room.contextRoot+'/' + Room.uniqueId + '/' + Room.name + '/cmd',
 					function(command) {
-						console.log('/topic/mancala/' + Room.uniqueId + '/' + Room.name + '/cmd, Command: ' + command)
+						console.log('/topic'+Room.contextRoot+'/' + Room.uniqueId + '/' + Room.name + '/cmd, Command: ' + command)
 						var cmd = JSON.parse(command.body);
 
-						Room.message(cmd);
-						
 						var commandToRun = eval('Room.' + cmd.command);
 						console.log(commandToRun)
 						
 						if (commandToRun)
 						    commandToRun(cmd)
+						    
+						Room.message(cmd);
+    
 					});
 
 ```
@@ -127,6 +131,51 @@ The client evaluates a command and executes it straightforward as a function.
 	}
 	
 ```
+
+The **Workflow.java** is a central implementation of the area of expertise that straightforward manages the logic and data of application. 
+**Workflow** operates in the terms of application logic and provides a response via builder abstraction, 
+where the resulting controller is communicated to the client via **Launcher.java** and underlying **Command.java**
+
+**See Workflow.java**
+```java
+		public interface Workflow<ActualUser extends User> {
+		
+			CommandBuilder<?> createRoom(String room, ActualUser user);
+			
+			CommandBuilder<?> leaveRoom(String room, ActualUser user);
+			
+			CommandBuilder<?> startGame(String room);
+			
+		}
+```
+
+**See CommandBuilder.java**
+```java
+	public interface CommandBuilder<T extends Launcher<?>> {
+	
+		CommandBuilder<T> operation(SimpMessageSendingOperations operation);
+	
+		CommandBuilder<T> topic(String topic);
+	
+		CommandBuilder<T> command(String command);
+	
+		T build();
+	}
+```
+
+**See Launcher.java**
+```java
+public interface Launcher<T> {
+
+	void launch();
+	
+	Command<T> getCommand();
+}
+```
+
+## Configuration
+
+
 
 
 

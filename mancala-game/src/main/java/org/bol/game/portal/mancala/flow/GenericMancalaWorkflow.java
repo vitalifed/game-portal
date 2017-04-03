@@ -11,7 +11,6 @@ import org.bol.game.portal.dto.User;
 import org.bol.game.portal.exception.GamePortalException;
 import org.bol.game.portal.exception.RoomOverflowException;
 import org.bol.game.portal.exception.RoomsThresholdExceedException;
-import org.bol.game.portal.flow.AbstractWorkflow;
 import org.bol.game.portal.mancala.builder.ListMessageCommandBuilder;
 import org.bol.game.portal.mancala.builder.MessageCommandBuilder;
 import org.bol.game.portal.mancala.dto.Mancala;
@@ -22,12 +21,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
-public abstract class GenericMancalaWorkflow extends AbstractWorkflow<MancalaUser>
-		implements MancalaWorkflow<MancalaUser> {
-	
+public abstract class GenericMancalaWorkflow implements MancalaWorkflow<MancalaUser> {
+
 	public static final String TOKEN = "token";
 	public static final String ROOM = "room";
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(GenericMancalaWorkflow.class);
 
 	@Value("${topic.path.cmd}")
@@ -83,7 +81,7 @@ public abstract class GenericMancalaWorkflow extends AbstractWorkflow<MancalaUse
 	@Override
 	public CommandBuilder<?> leaveRoom(String roomName, MancalaUser user) {
 		if (logger.isDebugEnabled())
-			logger.debug("Leave room, "+ user + " left the room.");
+			logger.debug("Leave room, " + user + " left the room.");
 
 		Room room = new Room(roomName);
 		User[] remainingUsers = getRoomRepository().removeUser(new Room(roomName), user);

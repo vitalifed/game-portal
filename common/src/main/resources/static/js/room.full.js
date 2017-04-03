@@ -1,8 +1,9 @@
 var Room = {
 
 	uniqueId : guid(),
-	contextRoot : '/mancala',
-	websocket : '/game-mancala-websocket',
+	//Next two fields should be initialised
+	contextRoot : '',
+	websocket : '',
 
 	name : null,
 	user : {
@@ -28,9 +29,9 @@ var Room = {
 		Room.stompClient.connect({}, function(frame) {
 			console.log('Connected: ' + frame);
 
-			Room.stompClient.subscribe('/topic/mancala/' + Room.uniqueId + '/' + Room.name + '/cmd',
+			Room.stompClient.subscribe('/topic'+Room.contextRoot+'/' + Room.uniqueId + '/' + Room.name + '/cmd',
 					function(command) {
-						console.log('/topic/mancala/' + Room.uniqueId + '/' + Room.name + '/cmd, Command: ' + command)
+						console.log('/topic'+Room.contextRoot+'/' + Room.uniqueId + '/' + Room.name + '/cmd, Command: ' + command)
 						var cmd = JSON.parse(command.body);
 
 						var commandToRun = eval('Room.' + cmd.command);
@@ -80,7 +81,7 @@ var Room = {
 
 	// Channels
 	create : function(cmd) {
-		Room.stompClient.send("/mancala/room/" + Room.name + '/create', {}, JSON.stringify({
+		Room.stompClient.send(Room.contextRoot + "/room/" + Room.name + '/create', {}, JSON.stringify({
 			'name' : Room.user.name,
 			'token' : Room.uniqueId
 		}));
@@ -96,7 +97,7 @@ var Room = {
 
 	leave : function(cmd) {
 		Page.leave(cmd)
-		Room.stompClient.send("/mancala/room/" + Room.name + '/leave', {}, JSON.stringify({
+		Room.stompClient.send(Room.contextRoot + "/room/" + Room.name + '/leave', {}, JSON.stringify({
 			'name' : Room.user.name,
 			'token' : Room.uniqueId
 		}));
@@ -105,7 +106,7 @@ var Room = {
 	},
 
 	step : function(idx) {
-		Room.stompClient.send("/mancala/room/" + Room.name + '/step/'+idx, {}, JSON.stringify({
+		Room.stompClient.send(Room.contextRoot + "/room/" + Room.name + '/step/'+idx, {}, JSON.stringify({
 			'name' : Room.user.name,
 			'token' : Room.uniqueId
 		}));

@@ -1,5 +1,8 @@
 $(function() {
 
+	Room.contextRoot='/mancala';
+	Room.websocket='/game-mancala-websocket';
+	
 	$("#room-submit").click(function(e) {
 		e.preventDefault();
 
