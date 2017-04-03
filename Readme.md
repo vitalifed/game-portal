@@ -74,7 +74,7 @@ The client evaluates a command and executes it straightforward as a function.
 
 ```
 
-**mancala-game module MancalaPortalController.java**
+**See in mancala-game module MancalaPortalController.java**
 ```java
 
 	@MessageMapping("/room/{room}/step/{idx}")
@@ -174,8 +174,3 @@ public interface Launcher<T> {
 ```
 
 ## Configuration
-
-
-
-
-
