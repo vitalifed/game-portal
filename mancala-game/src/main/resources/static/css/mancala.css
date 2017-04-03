@@ -1,0 +1,62 @@
+.row.content {
+	height: 450px
+}
+
+td.play-point {
+	height: 80px;
+	width: 80px;
+	background-image: url("../img/hole.png");
+	background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    font-size: 16px;
+}
+td.side-hole {
+	height: 100px;
+	width: 100px;
+	background-image: url("../img/side-hole.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    font-size: 18px;
+    font-weight: bolder;
+}
+
+.player-point {
+	cursor: pointer;
+	background-color: #e6ffe6;
+	opacity: 0.61;
+    filter: alpha(Opacity=60); 
+    color: black;
+}
+
+td.highlight {
+	background-color: #dd7e30;
+	opacity: 0.8;
+    filter: alpha(Opacity=80); 
+    border-color: #008a77; 
+    border-style: solid;
+    color: white;
+}
+
+table {
+	text-align: center;
+	vertical-align: center;
+	background-image: url("../img/wood.jpg");
+	color: white;
+	border: black solid 1px;
+}
+
+.disabled:hover {
+	cursor: default;
+}
+
+@media screen and (max-width: 767px) {
+	.sidenav {
+		height: auto;
+		padding: 15px;
+	}
+	.row.content {
+		height: auto;
+	}
+}
