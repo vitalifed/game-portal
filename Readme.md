@@ -150,7 +150,8 @@ public interface Workflow<ActualUser extends User, ActualGame extends Game<Actua
 
 	LauncherBuilder<?> stopGame(String room, ActualGame game);
 
-}```
+}
+```
 
 **See LauncherBuilder.java**
 ```java
