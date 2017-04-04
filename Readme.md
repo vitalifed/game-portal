@@ -1,12 +1,13 @@
 Mancala - Multiplayer game based on websocket communication protocol
 ====================================================================
 
+[TOC]
 
-- [Composition](#composition)
-	- [How does it work in particular ?](#how-does-it-work-in-particular-)
-		- [Repository](#repository)
-	- [Configuration](#configuration)
-	- [Security](#security)
+# Composition
+## How does it work in particular ?
+### Repository
+## Configuration
+## Security
 
 
 Mancala is one form the families of board games and this is a version of the basic game.
@@ -146,15 +147,17 @@ where the resulting controller is communicated to the client via **Launcher.java
 
 **See Workflow.java**
 ```java
-		public interface Workflow<ActualUser extends User> {
-
-			CommandBuilder<?> createRoom(String room, ActualUser user);
-
-			CommandBuilder<?> leaveRoom(String room, ActualUser user);
-
-			CommandBuilder<?> startGame(String room);
-
-		}
+	public interface Workflow<ActualUser extends User, ActualGame extends Game<ActualUser>> {
+	
+		CommandBuilder<?> createRoom(String room, ActualUser user);
+		
+		CommandBuilder<?> leaveRoom(String room, ActualUser user);
+		
+		CommandBuilder<?> startGame(String room);
+		
+		CommandBuilder<?> stopGame(String room, ActualGame game);
+			
+	}
 ```
 
 **See CommandBuilder.java**
@@ -222,12 +225,37 @@ The data manipulation is implemented through the single responsibility interface
 
 ## Security
 
-Essentially, the client generates a securely delegated token (aka Room.uniqueId, see room.full.js) and the client then uses the token to 
+Essentially, the client generates a securely delegated token (aka Room.uniqueId, see room.full.js), the client then uses the token to 
 perform mutual communication with server. The http conversation can be secured by means of TLS out of the box.
 
 ## Performance management
 
-In the nutshell, **RoomRepository** declines a creation of a room if the total amount exceeds a threshold, default value equals 100.
+In the nutshell, **RoomRepository** declines a creation of a room if the total amount exceeds a threshold, default value equals 100. 
+Moreover, the implementation of repository introduces a cache with eviction policy: 
+* each entry should be automatically removed from the cache once a fixed duration has elapsed after 
+** the entry's creation
+** the most recent replacement of its value, 
+** or its last access
+
+The default elapsed time is 10 minutes.
+
+# How to build and run application
+
+Run in **game-portal** 
+$ mvn install
+
+Run in **game-portal/mancala-game**
+$ mvn spring-boot:run
+
+Open a link in a browser http://localhost:8080/
+
+## How to run tests
+
+By default junit and integration tests are disabled, in order to build a projects and run test use the following:
+$ mvn install -Dmaven.test.skip=false
+
+ 
+
 
 
 
