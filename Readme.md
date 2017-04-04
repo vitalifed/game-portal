@@ -238,6 +238,7 @@ Run in **game-portal**
 $ mvn install
 
 Run in **game-portal/mancala-game**
+
 $ mvn spring-boot:run
 
 Open a link in a browser http://localhost:8080/
@@ -245,10 +246,5 @@ Open a link in a browser http://localhost:8080/
 ## How to run tests
 
 By default junit and integration tests are disabled, in order to build a projects and run test use the following:
+
 $ mvn install -Dmaven.test.skip=false
-
- 
-
-
-
-
