@@ -1,5 +1,13 @@
 package org.bol.game.portal.dto;
 
+/**
+ * Typical DTO that works as a container for server to client communication. 
+ * 
+ * @author VF85400
+ *
+ * @param <Payload>
+ *            It can be any DTO
+ */
 public class Command<Payload> {
 
 	private String command;
@@ -34,6 +42,4 @@ public class Command<Payload> {
 		return "Command [command=" + command + ", payload=" + payload + "]";
 	}
 
-	
-	
 }

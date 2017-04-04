@@ -1,5 +1,11 @@
 package org.bol.game.portal.exception;
 
+/**
+ * Thrown when a room overflow occurs because a number of room's visitors exceeds a limit.
+ * 
+ * @author VF85400
+ *
+ */
 public class RoomOverflowException extends GamePortalException {
 
 	/**

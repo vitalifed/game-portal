@@ -9,6 +9,17 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
+/**
+ * Convenient superclass for controller actual implementations, it supplies
+ * already typical operations can take place in the framework of game portal.
+ *
+ * @author VF85400
+ *
+ * @param <ActualUser>
+ *            Actual implementation of User
+ * @param <ActualGame>
+ *            Actual implementation of Game
+ */
 public abstract class AbstractPortalController<ActualUser extends User, ActualGame extends Game<ActualUser>> {
 
 	@Autowired

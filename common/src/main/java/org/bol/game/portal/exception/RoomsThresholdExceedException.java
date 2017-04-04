@@ -1,5 +1,11 @@
 package org.bol.game.portal.exception;
 
+/**
+ * Thrown when an amount of rooms in repository exceeds defined value.
+ * 
+ * @author VF85400
+ *
+ */
 public class RoomsThresholdExceedException extends GamePortalException {
 
 	private static final long serialVersionUID = 1L;
