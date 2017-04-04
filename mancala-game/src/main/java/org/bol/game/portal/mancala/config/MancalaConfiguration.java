@@ -8,8 +8,10 @@ import org.bol.game.portal.mancala.dto.Mancala;
 import org.bol.game.portal.mancala.flow.GameMancalaWorkflow;
 import org.bol.game.portal.mancala.repository.CacheBuilderConfiguration;
 import org.bol.game.portal.mancala.repository.MancalaRoomRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.RemovalListener;
@@ -17,6 +19,9 @@ import com.google.common.cache.RemovalNotification;
 
 @Configuration
 public class MancalaConfiguration {
+
+	@Autowired
+	private SimpMessagingTemplate simpMessagingTemplate;
 
 	@Bean
 	public MancalaRoomRepository roomRepository() {
@@ -47,8 +52,8 @@ public class MancalaConfiguration {
 		return new RemovalListener<Room, Mancala>() {
 			@Override
 			public void onRemoval(RemovalNotification<Room, Mancala> notification) {
-				System.out.println("removed");
-				workflow.stopGame(notification.getKey().getName(), notification.getValue());
+				workflow.stopGame(notification.getKey().getName(), notification.getValue())
+						.operation(simpMessagingTemplate).build().launch();
 			}
 		};
 	}

@@ -1,7 +1,9 @@
 package org.bol.game.portal.mancala.repository;
 
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
@@ -11,7 +13,6 @@ import org.bol.game.portal.exception.RoomOverflowException;
 import org.bol.game.portal.exception.RoomsThresholdExceedException;
 import org.bol.game.portal.mancala.dto.Mancala;
 import org.bol.game.portal.mancala.dto.MancalaUser;
-import org.bol.game.portal.mancala.flow.GameMancalaWorkflow;
 import org.junit.Test;
 
 import com.google.common.cache.CacheBuilder;
@@ -38,13 +39,20 @@ public class MancalaRoomRepositoryTest {
 	
 	@Test
 	public void testExpiration() throws GamePortalException, InterruptedException {
-		MancalaRoomRepository rep = new MancalaRoomRepository(repositoryConfiguration(listener(), 5, TimeUnit.SECONDS));
+		CountDownLatch latch = new CountDownLatch(1);
+		
+		MancalaRoomRepository rep = new MancalaRoomRepository(repositoryConfiguration(listener(latch), 5, TimeUnit.SECONDS));
 		rep.addUser(new Room("room"), new MancalaUser("user", "1"));
 		rep.addUser(new Room("room"), new MancalaUser("user", "2"));
 		
-		Thread.sleep(10000);
+		Thread.sleep(15000);
 		
 		assertNull(rep.get(new Room("room")));
+		
+		if (!latch.await(10, TimeUnit.SECONDS)){
+			fail("Cache is not cleaned up");
+		}
+		
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -62,11 +70,12 @@ public class MancalaRoomRepositoryTest {
 		};
 	}
 
-	private RemovalListener<Room, Mancala> listener() {
+	private RemovalListener<Room, Mancala> listener(CountDownLatch latch) {
 		return new RemovalListener<Room, Mancala>() {
 			@Override
 			public void onRemoval(RemovalNotification<Room, Mancala> notification) {
 				System.out.println("Removed");
+				latch.countDown();
 			}
 		};
 	}

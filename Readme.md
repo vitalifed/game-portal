@@ -1,7 +1,6 @@
 Mancala - Multiplayer game based on websocket communication protocol
 ====================================================================
 
-<!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 
 - [Composition](#composition)
 	- [How does it work in particular ?](#how-does-it-work-in-particular-)
@@ -9,7 +8,6 @@ Mancala - Multiplayer game based on websocket communication protocol
 	- [Configuration](#configuration)
 	- [Security](#security)
 
-<!-- /TOC -->
 
 Mancala is one form the families of board games and this is a version of the basic game.
 To get familiar with rules of game, take a look into [Mancala::Wiki](https://en.wikipedia.org/wiki/Mancala)

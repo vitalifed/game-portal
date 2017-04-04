@@ -21,7 +21,7 @@ public class MancalaRoomRepository implements RoomRepository<MancalaUser, Mancal
 
 	private int threshold;
 
-	private Cache<Room, Mancala> roomRepository;
+	private static Cache<Room, Mancala> roomRepository;
 
 	@SuppressWarnings("rawtypes")
 	public MancalaRoomRepository(CacheBuilderConfiguration<Integer, CacheBuilder> builder) {
@@ -29,11 +29,17 @@ public class MancalaRoomRepository implements RoomRepository<MancalaUser, Mancal
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public MancalaRoomRepository(CacheBuilderConfiguration<Integer, CacheBuilder> configuration, int threshold) {
-		this.threshold = threshold;
+	public MancalaRoomRepository(CacheBuilderConfiguration<Integer, CacheBuilder> configuration, int thresholdArg) {
+		this.threshold = thresholdArg;
 		roomRepository = configuration.apply(threshold).build();
+		
+		CleanUpControl.cleanUp(this);
 	}
 
+	public void cleanUp() {
+		roomRepository.cleanUp();
+	}
+	
 	public Mancala get(Room room) {
 		return roomRepository.asMap().get(room);
 	}
@@ -83,4 +89,8 @@ public class MancalaRoomRepository implements RoomRepository<MancalaUser, Mancal
 		}
 	}
 
+	void reinit(CacheBuilderConfiguration<Integer, CacheBuilder> configuration, int thresholdArg){
+		this.threshold = thresholdArg;
+		roomRepository = configuration.apply(threshold).build();
+	}
 }
