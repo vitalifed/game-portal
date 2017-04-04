@@ -248,3 +248,5 @@ Open a link in a browser http://localhost:8080/
 By default junit and integration tests are disabled, in order to build a projects and run test use the following:
 
 $ mvn install -Dmaven.test.skip=false
+
+
