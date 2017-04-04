@@ -20,11 +20,6 @@ class CleanUpControl {
 	private final static ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
 	public static void cleanUp(final MancalaRoomRepository roomRepository) {
-		final Runnable cleaner = new Runnable() {
-			public void run() {
-				roomRepository.cleanUp();
-			}
-		};
-		scheduler.scheduleAtFixedRate(cleaner, 10, 10, TimeUnit.SECONDS);
+		scheduler.scheduleAtFixedRate(()->roomRepository.cleanUp(), 10, 10, TimeUnit.SECONDS);
 	}
 }
