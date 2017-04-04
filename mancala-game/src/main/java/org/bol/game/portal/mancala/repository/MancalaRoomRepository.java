@@ -100,6 +100,7 @@ public class MancalaRoomRepository implements RoomRepository<MancalaUser, Mancal
 		}
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	void reinit(CacheBuilderConfiguration<Integer, CacheBuilder> configuration, int thresholdArg) {
 		this.threshold = thresholdArg;
 		roomRepository = configuration.apply(threshold).build();
