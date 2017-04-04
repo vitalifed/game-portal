@@ -7,7 +7,7 @@ import org.bol.game.portal.dto.Command;
  * It is a layer of abstraction that executes an operation. 
  * Interface to be implemented by any object that wishes to notify a subscriber with Command and payload.
  * 
- * @author VF85400
+ * @author <a href="mailto:vitali.fedosenko@gmail.com">Vitali Fedasenka</a>
  *
  * @param <T> A payload of command, at most this is a message, but can be any DTO 
  */

@@ -7,6 +7,14 @@ import java.util.List;
 import org.bol.game.portal.Launcher;
 import org.bol.game.portal.dto.Command;
 
+/**
+ * This is an implementation of a decorator pattern, it is designed so that
+ * multiple Launcher's can be stacked in a list and executed one by one.
+ * 
+ * @author <a href="mailto:vitali.fedosenko@gmail.com">Vitali Fedasenka</a>
+ *
+ * @param <T> One of {@link Launcher} implementation
+ */
 public class LauncherCollection<T extends Launcher<?>> implements Launcher<T> {
 
 	private List<T> launchers = new ArrayList<>();

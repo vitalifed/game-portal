@@ -17,6 +17,12 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.RemovalListener;
 import com.google.common.cache.RemovalNotification;
 
+/**
+ * Bootstrap configuration of mancala-game microservice
+ * 
+ * @author <a href="mailto:vitali.fedosenko@gmail.com">Vitali Fedasenka</a>
+ *
+ */
 @Configuration
 public class MancalaConfiguration {
 

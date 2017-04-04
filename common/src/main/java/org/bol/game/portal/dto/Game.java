@@ -3,7 +3,7 @@ package org.bol.game.portal.dto;
 /**
  * 
  * 
- * @author VF85400
+ * @author <a href="mailto:vitali.fedosenko@gmail.com">Vitali Fedasenka</a>
  *
  * @param <ActualUser>
  */

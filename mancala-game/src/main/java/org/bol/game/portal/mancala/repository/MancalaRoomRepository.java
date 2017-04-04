@@ -7,6 +7,7 @@ import org.bol.game.portal.dto.Room;
 import org.bol.game.portal.exception.GamePortalException;
 import org.bol.game.portal.exception.RoomOverflowException;
 import org.bol.game.portal.exception.RoomsThresholdExceedException;
+import org.bol.game.portal.mancala.config.MancalaConfiguration;
 import org.bol.game.portal.mancala.dto.Mancala;
 import org.bol.game.portal.mancala.dto.MancalaUser;
 import org.bol.game.portal.mancala.dto.State;
@@ -15,6 +16,16 @@ import org.bol.game.portal.repository.RoomRepository;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 
+/**
+ * The class provides a persistence mechanism, where the actual datasource is a
+ * cache with a threshold of amounts and eviction policy.
+ * 
+ * The default threshold equals 100.
+ * The cache evicts a value from cache based upon configuration defined in {@link MancalaConfiguration}
+ * 
+ * @author <a href="mailto:vitali.fedosenko@gmail.com">Vitali Fedasenka</a>
+ *
+ */
 public class MancalaRoomRepository implements RoomRepository<MancalaUser, Mancala> {
 
 	private static final int ROOMS_AMOUNT_THRESHOLD = 100;
@@ -27,19 +38,19 @@ public class MancalaRoomRepository implements RoomRepository<MancalaUser, Mancal
 	public MancalaRoomRepository(CacheBuilderConfiguration<Integer, CacheBuilder> builder) {
 		this(builder, ROOMS_AMOUNT_THRESHOLD);
 	}
-	
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public MancalaRoomRepository(CacheBuilderConfiguration<Integer, CacheBuilder> configuration, int thresholdArg) {
 		this.threshold = thresholdArg;
 		roomRepository = configuration.apply(threshold).build();
-		
+
 		CleanUpControl.cleanUp(this);
 	}
 
 	public void cleanUp() {
 		roomRepository.cleanUp();
 	}
-	
+
 	public Mancala get(Room room) {
 		return roomRepository.asMap().get(room);
 	}
@@ -89,7 +100,7 @@ public class MancalaRoomRepository implements RoomRepository<MancalaUser, Mancal
 		}
 	}
 
-	void reinit(CacheBuilderConfiguration<Integer, CacheBuilder> configuration, int thresholdArg){
+	void reinit(CacheBuilderConfiguration<Integer, CacheBuilder> configuration, int thresholdArg) {
 		this.threshold = thresholdArg;
 		roomRepository = configuration.apply(threshold).build();
 	}

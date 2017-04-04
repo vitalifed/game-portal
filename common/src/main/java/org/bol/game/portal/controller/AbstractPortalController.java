@@ -13,7 +13,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
  * Convenient superclass for controller actual implementations, it supplies
  * already typical operations can take place in the framework of game portal.
  *
- * @author VF85400
+ * @author <a href="mailto:vitali.fedosenko@gmail.com">Vitali Fedasenka</a>
  *
  * @param <ActualUser>
  *            Actual implementation of User

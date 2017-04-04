@@ -140,31 +140,30 @@ where the resulting controller is communicated to the client via **Launcher.java
 
 **See Workflow.java**
 ```java
-	public interface Workflow<ActualUser extends User, ActualGame extends Game<ActualUser>> {
-	
-		CommandBuilder<?> createRoom(String room, ActualUser user);
-		
-		CommandBuilder<?> leaveRoom(String room, ActualUser user);
-		
-		CommandBuilder<?> startGame(String room);
-		
-		CommandBuilder<?> stopGame(String room, ActualGame game);
-			
-	}
-```
+public interface Workflow<ActualUser extends User, ActualGame extends Game<ActualUser>> {
 
-**See CommandBuilder.java**
+	LauncherBuilder<?> createRoom(String room, ActualUser user);
+
+	LauncherBuilder<?> leaveRoom(String room, ActualUser user);
+
+	LauncherBuilder<?> startGame(String room);
+
+	LauncherBuilder<?> stopGame(String room, ActualGame game);
+
+}```
+
+**See LauncherBuilder.java**
 ```java
-	public interface CommandBuilder<T extends Launcher<?>> {
+public interface LauncherBuilder<T extends Launcher<?>> {
 
-		CommandBuilder<T> operation(SimpMessageSendingOperations operation);
+	LauncherBuilder<T> operation(SimpMessageSendingOperations operation);
 
-		CommandBuilder<T> topic(String topic);
+	LauncherBuilder<T> topic(String topic);
 
-		CommandBuilder<T> command(String command);
+	LauncherBuilder<T> command(String command);
 
-		T build();
-	}
+	T build();
+}
 ```
 
 **See Launcher.java**

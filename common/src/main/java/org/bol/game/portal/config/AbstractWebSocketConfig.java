@@ -7,7 +7,7 @@ import org.springframework.web.socket.config.annotation.AbstractWebSocketMessage
 /**
  * Basic configuration of websockets, it enables a broker to listen particular topic.
  * 
- * @author VF85400
+ * @author <a href="mailto:vitali.fedosenko@gmail.com">Vitali Fedasenka</a>
  *
  */
 public abstract class AbstractWebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {

@@ -5,6 +5,12 @@ import java.util.Arrays;
 import org.apache.commons.lang3.ArrayUtils;
 import org.bol.game.portal.mancala.dto.State;
 
+/**
+ * The class implements the mancala game rules
+ * 
+ * @author <a href="mailto:vitali.fedosenko@gmail.com">Vitali Fedasenka</a>
+ *
+ */
 public class RefineState {
 
 	private RefineState() {

@@ -4,6 +4,13 @@ import org.bol.game.portal.Launcher;
 import org.bol.game.portal.dto.Command;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 
+/**
+ * Simple launcher, it dispatches a {@link Command} with generic payload <T>
+ * 
+ * @author <a href="mailto:vitali.fedosenko@gmail.com">Vitali Fedasenka</a>
+ *
+ * @param <T> Any DTO
+ */
 public class SimpleLauncher<T> implements Launcher<T> {
 
 	private SimpMessageSendingOperations operation;

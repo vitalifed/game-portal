@@ -14,6 +14,13 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Controller;
 
+/**
+ * Basic mancala controller, rendering the movement made by user
+ * {@link MancalaUser}.
+ * 
+ * @author <a href="mailto:vitali.fedosenko@gmail.com">Vitali Fedasenka</a>
+ *
+ */
 @Controller
 public class MancalaPortalController extends AbstractPortalController<MancalaUser, Mancala> {
 

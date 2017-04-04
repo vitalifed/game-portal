@@ -4,15 +4,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.text.StrSubstitutor;
-import org.bol.game.portal.CommandBuilder;
+import org.bol.game.portal.LauncherBuilder;
 import org.bol.game.portal.dto.Message;
 import org.bol.game.portal.dto.Room;
 import org.bol.game.portal.dto.User;
 import org.bol.game.portal.exception.GamePortalException;
 import org.bol.game.portal.exception.RoomOverflowException;
 import org.bol.game.portal.exception.RoomsThresholdExceedException;
-import org.bol.game.portal.mancala.builder.ListMessageCommandBuilder;
-import org.bol.game.portal.mancala.builder.MessageCommandBuilder;
+import org.bol.game.portal.flow.Workflow;
+import org.bol.game.portal.mancala.builder.ListMessageLauncherBuilder;
+import org.bol.game.portal.mancala.builder.MessageLauncherBuilder;
 import org.bol.game.portal.mancala.dto.Mancala;
 import org.bol.game.portal.mancala.dto.MancalaUser;
 import org.bol.game.portal.mancala.launcher.SimpleLauncher;
@@ -21,7 +22,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
-public abstract class GenericMancalaWorkflow implements MancalaWorkflow<MancalaUser, Mancala> {
+/**
+ * Abstract class that implements generic methods of {@link Workflow}
+ * 
+ * @author <a href="mailto:vitali.fedosenko@gmail.com">Vitali Fedasenka</a>
+ *
+ */
+public abstract class GenericMancalaWorkflow implements Workflow<MancalaUser, Mancala> {
 
 	public static final String TOKEN = "token";
 	public static final String ROOM = "room";
@@ -32,11 +39,11 @@ public abstract class GenericMancalaWorkflow implements MancalaWorkflow<MancalaU
 	private String pathCmd;
 
 	@Override
-	public CommandBuilder<?> createRoom(String room, MancalaUser user) {
+	public LauncherBuilder<?> createRoom(String room, MancalaUser user) {
 		if (logger.isDebugEnabled())
 			logger.debug("Create Room=" + room + ", user=" + user);
 
-		MessageCommandBuilder builder = new MessageCommandBuilder();
+		MessageLauncherBuilder builder = new MessageLauncherBuilder();
 
 		Map<String, String> mapping = new HashMap<>();
 		mapping.put(TOKEN, user.getToken());
@@ -46,13 +53,13 @@ public abstract class GenericMancalaWorkflow implements MancalaWorkflow<MancalaU
 
 		try {
 			int size = getRoomRepository().addUser(new Room(room), user);
-			CommandBuilder<SimpleLauncher<Message>> commandBuilder = builder
+			LauncherBuilder<SimpleLauncher<Message>> launcherBuilder = builder
 					.message("Welcome to Mancala: " + user.getName()).command(RemoteCommand.SUBSCRIBE.command())
 					.topic(topic);
-			SimpleLauncher<Message> launcher = commandBuilder.build();
+			SimpleLauncher<Message> launcher = launcherBuilder.build();
 
 			if (size == 2) {
-				ListMessageCommandBuilder listBuilder = (ListMessageCommandBuilder) startGame(room);
+				ListMessageLauncherBuilder listBuilder = (ListMessageLauncherBuilder) startGame(room);
 				if (listBuilder != null) {
 					listBuilder.insertLauncher(launcher, 0);
 
@@ -60,7 +67,7 @@ public abstract class GenericMancalaWorkflow implements MancalaWorkflow<MancalaU
 				}
 			}
 
-			return commandBuilder;
+			return launcherBuilder;
 
 		} catch (RoomOverflowException e) {
 			logger.error(e.getMessage(), e);
@@ -79,21 +86,21 @@ public abstract class GenericMancalaWorkflow implements MancalaWorkflow<MancalaU
 	}
 
 	@Override
-	public CommandBuilder<?> leaveRoom(String roomName, MancalaUser user) {
+	public LauncherBuilder<?> leaveRoom(String roomName, MancalaUser user) {
 		if (logger.isDebugEnabled())
 			logger.debug("Leave room, " + user + " left the room.");
 
 		Room room = new Room(roomName);
 		User[] remainingUsers = getRoomRepository().removeUser(new Room(roomName), user);
 
-		ListMessageCommandBuilder builder = new ListMessageCommandBuilder();
+		ListMessageLauncherBuilder builder = new ListMessageLauncherBuilder();
 
 		Map<String, String> mapping = new HashMap<>();
 		mapping.put(ROOM, roomName);
 		for (int i = 0; i < remainingUsers.length; i++) {
 			mapping.put(TOKEN, remainingUsers[i].getToken());
 
-			SimpleLauncher<Message> launcher = new MessageCommandBuilder()
+			SimpleLauncher<Message> launcher = new MessageLauncherBuilder()
 					.message("User '" + user.getName() + "' left the room. Game is over.", Message.Type.WARNING)
 					.command(RemoteCommand.DISCONNECT.command()).topic(StrSubstitutor.replace(getPathCmd(), mapping))
 					.build();
@@ -107,10 +114,48 @@ public abstract class GenericMancalaWorkflow implements MancalaWorkflow<MancalaU
 	}
 
 	@Override
-	public CommandBuilder<?> stopGame(String roomName, Mancala game) {
+	public LauncherBuilder<?> startGame(String roomName) {
+		if (logger.isDebugEnabled())
+			logger.debug("Start game in Room=" + roomName);
+
+		Room room = new Room(roomName);
+
+		Map<MancalaUser, ?> map = getRoomRepository().get(room).getState();
+		if (map.size() == 2) {
+			getRoomRepository().init(room);
+
+			ListMessageLauncherBuilder builder = new ListMessageLauncherBuilder();
+
+			MancalaUser[] mancalaUsers = map.keySet().toArray(new MancalaUser[2]);
+			Map<String, String> mapping = new HashMap<>();
+			mapping.put(ROOM, roomName);
+
+			for (int i = 0; i < mancalaUsers.length; i++) {
+				mapping.put(TOKEN, mancalaUsers[i].getToken());
+
+				SimpleLauncher<Message> launcher = new MessageLauncherBuilder().message("The game is started")
+						.command(RemoteCommand.START.command()).topic(StrSubstitutor.replace(getPathCmd(), mapping))
+						.build();
+
+				builder.addLauncher(launcher);
+
+				if (i == 0) {
+					builder.addLauncher(new MessageLauncherBuilder().message("Let's start, your move")
+							.command(RemoteCommand.MOVE.command()).topic(StrSubstitutor.replace(getPathCmd(), mapping))
+							.build());
+					getRoomRepository().get(room).setCurrentUser(mancalaUsers[i]);
+				}
+			}
+
+			return builder;
+		}
+		return null;
+	}
+	@Override
+	public LauncherBuilder<?> stopGame(String roomName, Mancala game) {
 		if (logger.isDebugEnabled())
 			logger.debug("Stop game, room = " + roomName);
-		ListMessageCommandBuilder builder = new ListMessageCommandBuilder();
+		ListMessageLauncherBuilder builder = new ListMessageLauncherBuilder();
 
 		MancalaUser[] remainingUsers = game.getState().keySet().toArray(new MancalaUser[0]);
 		
@@ -119,7 +164,7 @@ public abstract class GenericMancalaWorkflow implements MancalaWorkflow<MancalaU
 		for (int i = 0; i < remainingUsers.length; i++) {
 			mapping.put(TOKEN, remainingUsers[i].getToken());
 
-			SimpleLauncher<Message> launcher = new MessageCommandBuilder()
+			SimpleLauncher<Message> launcher = new MessageLauncherBuilder()
 					.message("Game is over", Message.Type.WARNING)
 					.command(RemoteCommand.DISCONNECT.command()).topic(StrSubstitutor.replace(getPathCmd(), mapping))
 					.build();

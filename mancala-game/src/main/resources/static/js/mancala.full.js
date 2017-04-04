@@ -9,6 +9,8 @@ $(function() {
 		Room.name = $("#roomname").val()
 		Room.user.name = $("#username").val()
 
+		$("#room-name-m-id").html(Room.name+" :: Messages")
+		
 		var res = Room.connect()
 		console.log(res)
 
@@ -88,7 +90,6 @@ var Game = {
 	},
 
 	start : function(cmd) {
-
 		$("[id^=me-cell]").click(function(e) {
 			if (Game.locked == 1 || $(this).html() == '0') {
 				e.preventDefault();
@@ -98,7 +99,7 @@ var Game = {
 			id = $(this).attr("id");
 
 			Game.step(id.substring(id.length - 1))
-		})
+		});
 	},
 
 	move : function(cmd) {

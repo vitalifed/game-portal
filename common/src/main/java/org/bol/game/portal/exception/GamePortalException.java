@@ -4,7 +4,7 @@ package org.bol.game.portal.exception;
  * This exception should be thrown by application. Extend the exception with
  * more specific one so that it can be more easily routed or mapped.
  * 
- * @author VF85400
+ * @author <a href="mailto:vitali.fedosenko@gmail.com">Vitali Fedasenka</a>
  *
  */
 public class GamePortalException extends Exception {

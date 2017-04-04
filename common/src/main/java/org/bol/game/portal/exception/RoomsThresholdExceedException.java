@@ -3,7 +3,7 @@ package org.bol.game.portal.exception;
 /**
  * Thrown when an amount of rooms in repository exceeds defined value.
  * 
- * @author VF85400
+ * @author <a href="mailto:vitali.fedosenko@gmail.com">Vitali Fedasenka</a>
  *
  */
 public class RoomsThresholdExceedException extends GamePortalException {

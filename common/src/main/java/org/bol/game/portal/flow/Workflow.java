@@ -1,32 +1,28 @@
 package org.bol.game.portal.flow;
 
-import org.bol.game.portal.CommandBuilder;
+import org.bol.game.portal.LauncherBuilder;
 import org.bol.game.portal.dto.Game;
 import org.bol.game.portal.dto.User;
 
 /**
- * Workflows performs a bunch of steps across a particular operation and
- * provides a {@link CommandBuilder} that enables a controller to dispatch a
- * message to client.
+ * Workflow performs a bunch of steps across a particular operation and
+ * provides a {@link LauncherBuilder} that enables a controller to dispatch a
+ * message to a client.
  * 
- * @author VF85400
+ * @author <a href="mailto:vitali.fedosenko@gmail.com">Vitali Fedasenka</a>
  *
  * @param <ActualUser>
  * @param <ActualGame>
  */
 public interface Workflow<ActualUser extends User, ActualGame extends Game<ActualUser>> {
 
-	/**
-	 * @param room Room's name
-	 * @param user User
-	 * @return Command builder builder 
-	 */
-	CommandBuilder<?> createRoom(String room, ActualUser user);
+	
+	LauncherBuilder<?> createRoom(String room, ActualUser user);
 
-	CommandBuilder<?> leaveRoom(String room, ActualUser user);
+	LauncherBuilder<?> leaveRoom(String room, ActualUser user);
 
-	CommandBuilder<?> startGame(String room);
+	LauncherBuilder<?> startGame(String room);
 
-	CommandBuilder<?> stopGame(String room, ActualGame game);
+	LauncherBuilder<?> stopGame(String room, ActualGame game);
 
 }

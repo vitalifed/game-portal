@@ -9,7 +9,7 @@ import org.bol.game.portal.exception.GamePortalException;
  * The interface provides an abstraction over data manipulation, it unifies the
  * communications of controllers and data source, whatever it is.
  * 
- * @author VF85400
+ * @author <a href="mailto:vitali.fedosenko@gmail.com">Vitali Fedasenka</a>
  *
  * @param <ActualUser>
  *            Actual implementation of User

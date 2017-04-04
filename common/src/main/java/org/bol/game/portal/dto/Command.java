@@ -3,7 +3,7 @@ package org.bol.game.portal.dto;
 /**
  * Typical DTO that works as a container for server to client communication. 
  * 
- * @author VF85400
+ * @author <a href="mailto:vitali.fedosenko@gmail.com">Vitali Fedasenka</a>
  *
  * @param <Payload>
  *            It can be any DTO

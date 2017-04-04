@@ -7,6 +7,12 @@ import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 
+/**
+ * Bootstrap configuration of websockets broker and endpoint
+ * 
+ * @author <a href="mailto:vitali.fedosenko@gmail.com">Vitali Fedasenka</a>
+ *
+ */
 @Configuration
 @EnableWebSocketMessageBroker
 public class MancalaWebSocketConfig extends AbstractWebSocketConfig {
