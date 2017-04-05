@@ -243,10 +243,29 @@ $ mvn spring-boot:run
 
 Open a link in a browser http://localhost:8080/
 
+As an alternative, the application can be started in straightforward fashion, the target folder (game-portal/mancala-game/target) 
+should contain **mancala-game-0.0.1-SNAPSHOT.jar** after a build. Thereby, the application can be started by following command:
+
+$ java -jar mancala-game-0.0.1-SNAPSHOT.jar 
+
+
 ## How to run tests
 
 By default junit and integration tests are disabled, in order to build a projects and run test use the following:
 
 $ mvn install -Dmaven.test.skip=false
+
+## Technology stack
+
+JDK 1.8
+Spring Boot 1.5.2.RELEASE
+Spring Framework 4.3.7.RELEASE
+Spring Websocket 4.3.7.RELEASE
+Webjars 0.32
+JQuery 3.1.0
+Bootstrap 3.3.7
+Sockjs-client 1.0.2
+Stomp-websocket latest [STOMP Over WebSocket](http://jmesnil.net/stomp-websocket/doc/)
+Maven 3.x
 
 
