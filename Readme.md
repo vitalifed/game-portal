@@ -258,6 +258,7 @@ $ mvn install -Dmaven.test.skip=false
 ## Technology stack
 
 JDK 1.8
+
 * Spring Boot 1.5.2.RELEASE
 * Spring Framework 4.3.7.RELEASE
 * Spring Websocket 4.3.7.RELEASE
