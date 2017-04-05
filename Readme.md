@@ -258,14 +258,12 @@ $ mvn install -Dmaven.test.skip=false
 ## Technology stack
 
 JDK 1.8
-Spring Boot 1.5.2.RELEASE
-Spring Framework 4.3.7.RELEASE
-Spring Websocket 4.3.7.RELEASE
-Webjars 0.32
-JQuery 3.1.0
-Bootstrap 3.3.7
-Sockjs-client 1.0.2
-Stomp-websocket latest [STOMP Over WebSocket](http://jmesnil.net/stomp-websocket/doc/)
-Maven 3.x
-
-
+* Spring Boot 1.5.2.RELEASE
+* Spring Framework 4.3.7.RELEASE
+* Spring Websocket 4.3.7.RELEASE
+* Webjars 0.32
+* JQuery 3.1.0
+* Bootstrap 3.3.7
+* Sockjs-client 1.0.2
+* Stomp-websocket latest [STOMP Over WebSocket](http://jmesnil.net/stomp-websocket/doc/)
+* Maven 3.x
