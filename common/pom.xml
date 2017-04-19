@@ -6,7 +6,7 @@
 	<artifactId>common</artifactId>
 
 	<parent>
-		<groupId>org.bol.game.portal</groupId>
+		<groupId>org.steelrat.game.portal</groupId>
 		<artifactId>game-portal</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>

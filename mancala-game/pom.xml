@@ -8,20 +8,20 @@
 	<description>Mancala game</description>
 
 	<parent>
-		<groupId>org.bol.game.portal</groupId>
+		<groupId>org.steelrat.game.portal</groupId>
 		<artifactId>game-portal</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
 	<properties>
-		<start-class>org.bol.game.portal.mancala.Mancala</start-class>
+		<start-class>org.steelrat.game.portal.mancala.Mancala</start-class>
 		<maven.test.skip>true</maven.test.skip>
 	</properties>
 
 
 	<dependencies>
 		<dependency>
-			<groupId>org.bol.game.portal</groupId>
+			<groupId>org.steelrat.game.portal</groupId>
 			<artifactId>common</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>

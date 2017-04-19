@@ -2,5 +2,5 @@
 <configuration>
 	<include resource="org/springframework/boot/logging/logback/base.xml" />
 	<logger name="org.springframework" level="INFO" />
-	<logger name="org.bol.game.portal" level="DEBUG" />
+	<logger name="org.steelrat.game.portal" level="DEBUG" />
 </configuration>
